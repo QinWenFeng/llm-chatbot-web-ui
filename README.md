@@ -2,7 +2,7 @@
 
 This project features a web-based chatbot interface built using [Gradio library](https://gradio.app/) and model from the [Hugging Face Transformers library](https://huggingface.co/transformers/). The interface allows users to interact with an AI model, customize text generation parameters, and engage in dynamic conversations.
 
-![web-interface](chatbot-web-ui/images/web-interface.png)
+![web-interface](images/web-interface.png)
 
 ## Getting Started
 
