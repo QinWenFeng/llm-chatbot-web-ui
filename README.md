@@ -1,6 +1,6 @@
 # Chatbot Web UI
 
-This project features a web-based chatbot interface built using [Gradio library](https://gradio.app/) and model from the [Hugging Face Transformers library](https://huggingface.co/transformers/). The interface allows users to interact with an AI model, customize text generation parameters, and engage in dynamic conversations.
+This project is a Gradio-based chatbot application that leverages the power of LangChain and Hugging Face models to perform both conversational AI and PDF document retrieval. The chatbot is capable of handling text-based queries, generating responses based on Large Language Models (LLMs), customize text generation parameters and retrieving information from uploaded PDF documents.
 
 ![web-interface](images/web-interface.png)
 
@@ -24,7 +24,7 @@ pip install -r requirements.txt
 1. Run the following command to start the chatbot interface:
 
 ```bash
-python main.py
+python3 app.py
 ```
 
 2. Once the server is running, open your web browser and navigate to http://127.0.0.1:7860 to access the chatbot interface.
