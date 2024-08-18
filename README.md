@@ -4,6 +4,21 @@ This project is a Gradio-based chatbot application that leverages the power of L
 
 ![web-interface](images/web-interface.png)
 
+## Features
+
+* Provides Parameters Control
+  - temperature
+  - token limit
+  - top-k
+  - top-p
+* Provides a RESET PARAMETERS Button to Restore Default Parameters Setting
+* Provides a Clear Button to Reset the Conversation in the Interface
+* Supports PDF-Based Retrieval-Augmented Generation (RAG)
+* Supports embedding model
+  - [all-MiniLM-L6-v2](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2)
+* Supports text generation model
+  - [Phi-3-mini-4k-instruct](https://huggingface.co/microsoft/Phi-3-mini-4k-instruct)
+
 ## Getting Started
 
 1. Clone this repository:
