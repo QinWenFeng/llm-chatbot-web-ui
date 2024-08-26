@@ -17,7 +17,7 @@ def user(user_message, chat_history):
 def bot(user_message, chat_history, temp, max_tokens, top_k, top_p):
     model, tokenizer = load_model("microsoft/Phi-3-mini-4k-instruct")
     if user_message["files"]:
-        docs = load_pdf(user_message["files"][0])
+        docs = load_pdf(user_message["files"])
         splits, ids = spilt_text(docs, 300, 50)
         vector_store = load_vector_db("collection", embeddings)
         vector_store.add_documents(documents=splits, ids=ids)

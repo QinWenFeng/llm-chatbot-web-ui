@@ -11,9 +11,11 @@ from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
 def load_embeddings(embeddings_model):
     return HuggingFaceEmbeddings(model_name = embeddings_model)
 
-def load_pdf(file):
-    loader = PyPDFLoader(file)
-    docs = loader.load()
+def load_pdf(files):
+    docs = []
+    for file in files:
+        loader = PyPDFLoader(file)
+        docs.extend(loader.load())
     return docs
 
 def spilt_text(docs, chunksize, chunk_overlap):
