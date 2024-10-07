@@ -24,7 +24,7 @@ This project is a Gradio-based chatbot application that leverages the power of L
 1. Clone this repository:
 
 ```bash
-git clone https://github.com/QinWenFeng/chatbot-web-ui.git
+git clone https://github.com/QinWenFeng/llm-chatbot-web-ui.git
 cd llm-chatbot-web-ui
 ```
 
