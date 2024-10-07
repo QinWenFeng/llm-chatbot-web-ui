@@ -1,16 +1,25 @@
-from langchain_huggingface import HuggingFaceEmbeddings, HuggingFacePipeline
+import ollama
+
+from langchain_huggingface.embeddings import HuggingFaceEmbeddings
 from langchain_community.document_loaders import PyPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_chroma import Chroma
 from langchain.prompts import ChatPromptTemplate
+from langchain_openai import ChatOpenAI
 from langchain_core.runnables import RunnablePassthrough
 from langchain_core.output_parsers import StrOutputParser
 
-from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline 
+# List all available LLM models
+def list_model():
+    models_info = ollama.list()
+    models_list = [model['model'] for model in models_info['models']]
+    return models_list
 
-def load_embeddings(embeddings_model):
-    return HuggingFaceEmbeddings(model_name = embeddings_model)
+# Loads embedding model from HuggingFace
+def load_embeddings(embedding_model):
+    return HuggingFaceEmbeddings(model_name=embedding_model)
 
+# Loads the content from a list of PDF files
 def load_pdf(files):
     docs = []
     for file in files:
@@ -18,67 +27,58 @@ def load_pdf(files):
         docs.extend(loader.load())
     return docs
 
-def spilt_text(docs, chunksize, chunk_overlap):
+# Splits the documents into smaller chunks for processing
+def split_text(docs, chunksize, chunk_overlap):
     text_splitter = RecursiveCharacterTextSplitter.from_tiktoken_encoder(
         chunk_size=chunksize, 
         chunk_overlap=chunk_overlap
     )
-    splits = text_splitter.split_documents(docs)
-    ids = [f"{i}" for i in range(len(splits))]
-    return splits, ids
+    chunks = text_splitter.split_documents(docs)
+    ids = [f"{i}" for i in range(len(chunks))]
+    return chunks, ids
     
-def load_vector_db(collection_name, embedding_function):
+# Loads a Chroma vector database
+def load_chroma_db(collection_name, embedding_function, persistent_directory):
     return Chroma(
         collection_name=collection_name,
-        embedding_function=embedding_function
+        embedding_function=embedding_function,
+        persist_directory=f"./db/{persistent_directory}",
     )
-    
+
+# Converts retrived result to json format
+def results_to_json(results):
+    results_json = []
+    for res in results:
+        results_json.append(
+            {
+                "page_content": res.page_content,
+                "metadata": res.metadata,
+            }
+        )
+    return results_json
+
+# Creates prompt template
 def create_prompt(template):
     return ChatPromptTemplate.from_template(template)
     
-def load_model(llm_model):
-    model = AutoModelForCausalLM.from_pretrained( 
-        llm_model,  
-        device_map="cuda",  
-        torch_dtype="auto",  
-        trust_remote_code=True, 
-    ) 
-    tokenizer = AutoTokenizer.from_pretrained(llm_model)
-    return model, tokenizer
-
-def load_pipe(model, tokenizer, temp, max_tokens, top_k, top_p):
-    pipe = pipeline( 
-        "text-generation", 
-        model=model, 
-        tokenizer=tokenizer,
-        max_new_tokens=max_tokens,
-        do_sample=True,
-        temperature=temp, 
-        top_k=top_k,
+# Loads LLM models from the environment variables
+def load_llm(model, endpoint, temp, max_tokens, top_p):
+    llm = ChatOpenAI(
+        model=model,
+        base_url=endpoint,
+        api_key="ollama", 
+        temperature=temp,
+        max_tokens=max_tokens,
         top_p=top_p,
-    ) 
-    return HuggingFacePipeline(pipeline=pipe)
+    )
+    return llm
 
-def generate_response(user_message, model, tokenizer, temp, max_tokens, top_k, top_p):
-    pipe = pipeline( 
-        "text-generation", 
-        model=model, 
-        tokenizer=tokenizer, 
-    ) 
+# Generates response without RAG
+def generate_response(user_message, llm):   
+    response = llm.invoke(user_message)
+    return response.content
 
-    generation_args = { 
-        "max_new_tokens": max_tokens, 
-        "return_full_text": False, 
-        "do_sample": True, 
-        "temperature": temp, 
-        "top_k": top_k,
-        "top_p": top_p,
-    } 
-    
-    output = pipe(user_message, **generation_args) 
-    return output[0]['generated_text']
-
-
+# Generates response with RAG
 def generate_rag_response(retriever, prompt, llm, question):
     rag_chain = (
         {"context": retriever, "question": RunnablePassthrough()}
@@ -86,4 +86,5 @@ def generate_rag_response(retriever, prompt, llm, question):
         | llm
         | StrOutputParser()
     )
-    return rag_chain.invoke(question)
+    response = rag_chain.invoke(question)
+    return response

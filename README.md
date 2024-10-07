@@ -1,4 +1,4 @@
-# Chatbot Web UI
+# LLM Chatbot Web UI
 
 This project is a Gradio-based chatbot application that leverages the power of LangChain and Hugging Face models to perform both conversational AI and PDF document retrieval. The chatbot is capable of handling text-based queries, generating responses based on Large Language Models (LLMs), customize text generation parameters and retrieving information from uploaded PDF documents.
 
@@ -6,18 +6,18 @@ This project is a Gradio-based chatbot application that leverages the power of L
 
 ## Features
 
-* Provides Parameters Control
+* Provides Generation Parameters Control
   - temperature
   - token limit
-  - top-k
   - top-p
-* Provides a RESET PARAMETERS Button to Restore Default Parameters Setting
+* Provides Search Parameters Control
+  - k
 * Provides a Clear Button to Reset the Conversation in the Interface
 * Supports PDF-Based Retrieval-Augmented Generation (RAG)
 * Supports embedding model
   - [all-MiniLM-L6-v2](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2)
 * Supports text generation model
-  - [Phi-3-mini-4k-instruct](https://huggingface.co/microsoft/Phi-3-mini-4k-instruct)
+  - [all models listed in Ollama](https://ollama.com/library)
 
 ## Getting Started
 
