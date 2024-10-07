@@ -25,10 +25,21 @@ This project is a Gradio-based chatbot application that leverages the power of L
 
 ```bash
 git clone https://github.com/QinWenFeng/chatbot-web-ui.git
-cd chatbot-web-ui
+cd llm-chatbot-web-ui
 ```
 
-2. Install the required dependencies:
+2. Create virtual environment:
+```bash
+python3 -m venv venv
+```
+
+3. Activate virtual environment:
+```bash
+# Ubuntu
+source venv/bin/activate
+```
+
+4. Install the required dependencies:
 
 ```bash
 pip install -r requirements.txt
