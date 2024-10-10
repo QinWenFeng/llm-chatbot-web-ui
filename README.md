@@ -55,6 +55,6 @@ python3 app.py
 
 2. Once the server is running, open your web browser and navigate to http://127.0.0.1:7860 to access the chatbot interface.
 
+## Star History
 
-
-
+[![Star History Chart](https://api.star-history.com/svg?repos=QinWenFeng/llm-chatbot-web-ui&type=Date)](https://star-history.com/#QinWenFeng/llm-chatbot-web-ui&Date)
